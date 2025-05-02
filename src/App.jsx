@@ -10,6 +10,15 @@ const products = [
 ];
 
 function App() {
+  const [addedProducts, setAddedProducts] = useState([]);
+
+  const addToCart = (product) => {
+    const exists = addedProducts.find((p) => p.name === product.name);
+    if (!exists) {
+      setAddedProducts([...addedProducts, { ...product, quantity: 1 }]);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Lista Prodotti</h1>
@@ -17,11 +26,29 @@ function App() {
         {products.map((product, index) => (
           <li key={index}>
             <strong>{product.name}</strong>: €{product.price.toFixed(2)}
+            <button onClick={() => addToCart(product)} style={{ marginLeft: '10px' }}>
+              Aggiungi al carrello
+            </button>
           </li>
         ))}
       </ul>
+
+      {addedProducts.length > 0 && (
+        <>
+          <h2>Carrello</h2>
+          <ul>
+            {addedProducts.map((product, index) => (
+              <li key={index}>
+                {product.name} - €{product.price.toFixed(2)} - Quantità: {product.quantity}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 }
 
 export default App;
+
+
